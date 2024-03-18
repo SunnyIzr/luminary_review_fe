@@ -217,9 +217,11 @@ export default function Home() {
                         {articles && articles.length > 1 &&
                             <div className="row justify-content-center">
                                 <div className="col-xl-6 col-lg-8">
-                                    <div className="handpicked__item big-post">
+                                    <div className="handpicked__item big-post trending__post-thumb">
                                         <div className="handpicked__thumb tgImage__hover">
                                             <Link href={`/articles/${articles[7].id}`}><img src={`/assets/img/${articles[7].category}/${articles[7].img}`} alt="img" /></Link>
+                                            {(articles[7].content_tier == 'standard') && <span className="is_trend"><i className="fas fa-lock" /></span>}
+                                            {(articles[7].content_tier == 'premium') && <span className="is_trend"><i className="fas fa-lightbulb" /></span>}
                                         </div>
                                         <div className="handpicked__content">
                                             <ul className="tgbanner__content-meta list-wrap">
@@ -236,9 +238,11 @@ export default function Home() {
                                         <div className="row">
                                             {articles && articles.length > 0 && [articles[24], articles[17], articles[4], articles[25]].map((item, i) => (
                                                 <div className="col-xl-6 col-lg-4 col-md-6" key={i}>
-                                                    <div className="handpicked__item small-post">
+                                                    <div className="handpicked__item small-post trending__post-thumb">
                                                         <div className="handpicked__thumb tgImage__hover">
                                                             <Link href={`/articles/${item.id}`}><img src={`/assets/img/${item.category}/${item.img}`} alt="img" /></Link>
+                                                            {(item.content_tier == 'standard') && <span className="is_trend"><i className="fas fa-lock" /></span>}
+                                                            {(item.content_tier == 'premium') && <span className="is_trend"><i className="fas fa-lightbulb" /></span>}
                                                         </div>
                                                         <div className="handpicked__content">
                                                             <ul className="tgbanner__content-meta list-wrap">

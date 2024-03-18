@@ -51,6 +51,27 @@ export default function BlogDetails() {
         fetchData();
     }, [id]);
 
+    const fetchPortalSessionUrl = () => {
+        // Make a request to fetch user name using the token
+        // Replace the URL with your actual API endpoint
+        fetch(`${root_domain}/users/stripe_portal`, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+                "Content-Type": "application/json",
+            }, 
+            method: "POST",
+            body: JSON.stringify({ return_url: window.location.origin })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('portal data', data)
+            window.location.href = data.url;
+        })
+        .catch(error => {
+            console.error('Error fetching user name:', error);
+        });
+    };
+
     if (showLoginModal) {
         return (
             <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: "block" }}>
@@ -161,7 +182,7 @@ export default function BlogDetails() {
                                 marginTop: "3rem",
                                 marginBottom: '2rem'
                             }}>
-                                <Link href="/subscribe" className="btn btn-primary" style={{
+                                <Link href="#" onClick={fetchPortalSessionUrl} className="btn btn-primary" style={{
                                     marginRight: "1rem"
                                 }}>
                                     Upgrade

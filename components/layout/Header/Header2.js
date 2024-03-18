@@ -69,7 +69,7 @@ const Header1 = ({ scroll,
                                             ): null}
 
                                             { accessibleTiers && !accessibleTiers.includes('premium') && accessibleTiers.includes('standard') ? (
-                                                <li><Link href="/upgrade" style={{'padding': '17px 23px 17px 20px', marginTop: '10px', marginBottom: '-10px'}} className="btn" data-animation-in="tg-fadeInUp" data-delay-in={1}><span className="btn-text">Upgrade</span></Link></li>
+                                                <li><Link href="#" onClick={fetchPortalSessionUrl} style={{'padding': '17px 23px 17px 20px', marginTop: '10px', marginBottom: '-10px'}} className="btn" data-animation-in="tg-fadeInUp" data-delay-in={1}><span className="btn-text">Upgrade</span></Link></li>
                                             ): null}
                                             <li>
                                                 Welcome {userName}! (<Link style={{display: 'inline'}} onClick={logout} href='#'>Sign out</Link>)

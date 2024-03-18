@@ -38,9 +38,9 @@ export default function Menu({ handleMobileMenuOpen, handleSidebarOpen, offCanva
                         <ul className="navigation">
                             <li className={router.pathname == "/" ? "active" : ""}><Link href="/">Home</Link>
                             </li>
-                            <li className={router.pathname == "/lifestyle" ? "active" : ""}><Link href="/lifestyle">Innovation</Link></li>
-                            <li className={router.pathname == "/travel" ? "active" : ""}><Link href="/travel">Economics</Link></li>
-                            <li><Link href="/nft">Culture</Link></li>
+                            <li className={router.pathname == "/category/innovation" ? "active" : ""}><Link href="/category/innovation">Innovation</Link></li>
+                            <li className={router.pathname == "/category/economics" ? "active" : ""}><Link href="/category/economics">Economics</Link></li>
+                            <li className={router.pathname == "/category/culture" ? "active" : ""}><Link href="/category/culture">Culture</Link></li>
                         </ul>
                     </div>
                     <div className="tgmenu__action">

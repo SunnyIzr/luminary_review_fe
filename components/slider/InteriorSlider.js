@@ -35,8 +35,10 @@ export default function InteriorSlider({ data }) {
                                 </div>
                             </div>
                             <div className="col-xl-7 col-lg-6">
-                                <div className="slider__img-wrap">
+                                <div className="slider__img-wrap trending__post-thumb">
                                     <img src={`/assets/img/${item.category}/${item.img}`} className="main-img" alt="img" />
+                                    {(item.content_tier == 'standard') && <span className="is_trend"><i className="fas fa-lock" /></span>}
+                                    {(item.content_tier == 'premium') && <span className="is_trend"><i className="fas fa-lightbulb" /></span>}
                                 </div>
                             </div>
                         </div>

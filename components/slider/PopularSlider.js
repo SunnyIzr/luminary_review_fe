@@ -52,7 +52,8 @@ export default function PopularSlider({ data }) {
                             <div className="trending__post-thumb tgImage__hover">
                                 <Link href="#" className="addWish"><i className="fal fa-heart" /></Link>
                                 <Link href={`/articles/${item.id}`}><img src={`/assets/img/${item.category}/${item.img}`} alt="img" /></Link>
-                                {/* {item.trending && <span className="is_trend"><i className="fas fa-lock" /></span>} */}
+                                {(item.content_tier == 'standard') && <span className="is_trend"><i className="fas fa-lock" /></span>}
+                                {(item.content_tier == 'premium') && <span className="is_trend"><i className="fas fa-lightbulb" /></span>}
                             </div>
                             <div className="trending__post-content">
                                 <ul className="tgbanner__content-meta list-wrap">
