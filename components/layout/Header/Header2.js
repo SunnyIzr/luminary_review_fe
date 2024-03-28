@@ -16,8 +16,8 @@ const Header1 = ({ scroll,
 
 
 
-    const { loginWithRedirect, logout, getAccessTokenSilently } = useAuth0();
-    const { userName, accessibleTiers } = useUserData();
+        const { loginWithRedirect, logout, getAccessTokenSilently } = useAuth0();
+        const { userName, accessibleTiers } = useUserData();
     
     const fetchPortalSessionUrl = async () => {
         // Make a request to fetch user name using the token
@@ -77,7 +77,9 @@ const Header1 = ({ scroll,
                                                 <li><Link href="#" onClick={fetchPortalSessionUrl} style={{'padding': '17px 23px 17px 20px', marginTop: '10px', marginBottom: '-10px'}} className="btn" data-animation-in="tg-fadeInUp" data-delay-in={1}><span className="btn-text">Upgrade</span></Link></li>
                                             ): null}
                                             <li>
-                                                Welcome {userName}! (<Link style={{display: 'inline'}} onClick={logout} href='#'>Sign out</Link>)
+                                                Welcome {userName}! (<Link style={{display: 'inline'}} onClick={() => {
+                                                    logout({ returnTo: window.location.origin });
+                                                }} href='#'>Sign out</Link>)
                                                 {accessibleTiers && accessibleTiers.includes('free') ? (
                                                     <div><Link href='/account' >View Account</Link></div>
                                                 ) : null}
