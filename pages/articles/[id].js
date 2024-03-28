@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import data from "../../util/blogData"
+import { useUserData } from '@/context/UserContext';
 import { useAuth0 } from "@auth0/auth0-react";
 const { root_domain } = require("@/constants/root_url");
 
@@ -15,7 +16,8 @@ export default function BlogDetails() {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showSubscribeModal, setShowSubscribeModal] = useState(false);
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-    const { getAccessTokenSilently } = useAuth0();
+    const { getAccessTokenSilently, loginWithRedirect } = useAuth0();
+    const { email } = useUserData();
 
     useEffect(() => {
         setItem(data.find((data) => data.id == id));
@@ -53,16 +55,25 @@ export default function BlogDetails() {
                 console.error(error);
             }
         };
-
-        fetchData();
+        if (email){
+            fetchData();
+        } else {
+            setShowLoginModal(true)
+        }
     }, [id]);
 
-    const fetchPortalSessionUrl = () => {
+    const fetchPortalSessionUrl = async (e) => {
+        e.preventDefault()
         // Make a request to fetch user name using the token
         // Replace the URL with your actual API endpoint
+        const accessToken = await getAccessTokenSilently({
+            audience: `luminary-review-api.com`,
+            scope: "read:current_user",
+        })
+
         fetch(`${root_domain}/users/stripe_portal`, {
             headers: {
-                Authorization: `Bearer ${authToken}`,
+                Authorization: `Bearer ${accessToken}`,
                 "Content-Type": "application/json",
             }, 
             method: "POST",
@@ -105,13 +116,30 @@ export default function BlogDetails() {
                                 marginTop: "3rem",
                                 marginBottom: '2rem'
                             }}>
-                                <Link href="/subscribe" className="btn btn-primary" style={{
+                                <Link href="#" onClick={
+                                    (e) => {
+                                        e.preventDefault();
+                                        loginWithRedirect({
+                                            authorizationParams: {
+                                                screen_hint: "signup",
+                                                redirect_uri: `${window.location.origin}/subscribe`
+                                            }
+                                        });
+                                    }
+                                } className="btn btn-primary" style={{
                                     marginRight: "1rem"
                                 }}>
                                     Subscribe
                                 </Link>
                                 <div style={{marginTop: '10px'}}>
-                                    Already have an account? <Link href="/sign_in">Log in</Link>.
+                                    Already have an account? <Link href="/#" onClick={
+                                        (e) => {
+                                            e.preventDefault();
+                                            loginWithRedirect({
+                                                redirect_uri: window.location.href
+                                            });
+                                        }
+                                    }>Log in</Link>.
                                 </div>
                             </div>
                         </div>

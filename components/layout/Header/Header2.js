@@ -78,7 +78,9 @@ const Header1 = ({ scroll,
                                             ): null}
                                             <li>
                                                 Welcome {userName}! (<Link style={{display: 'inline'}} onClick={() => {
-                                                    logout({ returnTo: window.location.origin });
+                                                    logout({ 
+                                                        logoutParams: {returnTo: window.location.origin}
+                                                    });
                                                 }} href='#'>Sign out</Link>)
                                                 {accessibleTiers && accessibleTiers.includes('free') ? (
                                                     <div><Link href='/account' >View Account</Link></div>
