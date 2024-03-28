@@ -8,18 +8,16 @@ import Layout from "@/components/layout/Layout";
 import Link from "next/link";
 import { useRouter } from "next/router"; 
 import { useSearchParams } from 'next/navigation'
-import { useAuth } from "../context/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 const { root_domain } = require("@/constants/root_url");
 
 export default function Checkout() {
     const [error, setError] = useState("");
     const router = useRouter(); 
-    const { authToken } = useAuth();
     const searchParams = useSearchParams()
     const [clientSecret, setClientSecret] = useState('');
     const plan_id = searchParams.get('planId')
-
-    console.log('authToken', authToken)
+    const { getAccessTokenSilently } = useAuth0();
 
     const stripePromise = loadStripe("pk_test_51N0nnFCaYvT2BgMYG59TzQn0Qwa16HHaBCHuXPsF2aKZCnKeAdf4o73aTiVDqYj0uGxaKCSF20Y8Wf4F8SPjF65100n2avhVxI");
 
@@ -28,14 +26,18 @@ export default function Checkout() {
 
         const fetchData = async () => {
             const returnUrl = window.location.origin + "/";
+            const accessToken = await getAccessTokenSilently({
+                audience: `luminary-review-api.com`,
+                scope: "read:current_user",
+            })
             try {
-                if (authToken) {
+                if (accessToken) {
                     const response = await fetch(
                         `${root_domain}/users/stripe_checkout`,
                         {
                             method: "POST",
                             headers: {
-                                "Authorization": `Bearer ${authToken}`,
+                                "Authorization": `Bearer ${accessToken}`,
                                 "Content-Type": "application/json",
                             },
                             body: JSON.stringify({ plan_id: plan_id, return_url: returnUrl }),   

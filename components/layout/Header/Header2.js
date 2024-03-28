@@ -2,7 +2,8 @@ import Link from 'next/link'
 import Menu from './Menu'
 import MobileMenu from './MobileMenu'
 import Sidebar from './Sidebar'
-import { useAuth } from '../../../context/AuthContext'; 
+import { useUserData } from '@/context/UserContext';
+import { useAuth0 } from "@auth0/auth0-react";
 const { root_domain } = require("@/constants/root_url");
 
 const Header1 = ({ scroll,
@@ -13,18 +14,22 @@ const Header1 = ({ scroll,
     handleSidebarClose,
     handleSidebarOpen }) => {
 
+
+
+    const { loginWithRedirect, logout, getAccessTokenSilently } = useAuth0();
+    const { userName, accessibleTiers } = useUserData();
     
-    const { authToken, logout, userName, accessibleTiers } = useAuth();
-    
-    console.log("**** userName", userName)
-    console.log("**** accessibleTiers", accessibleTiers)
-    
-    const fetchPortalSessionUrl = () => {
+    const fetchPortalSessionUrl = async () => {
         // Make a request to fetch user name using the token
         // Replace the URL with your actual API endpoint
+        const accessToken = await getAccessTokenSilently({
+            audience: `luminary-review-api.com`,
+            scope: "read:current_user",
+        })
+
         fetch(`${root_domain}/users/stripe_portal`, {
             headers: {
-                Authorization: `Bearer ${authToken}`,
+                Authorization: `Bearer ${accessToken}`,
                 "Content-Type": "application/json",
             }, 
             method: "POST",
@@ -62,7 +67,7 @@ const Header1 = ({ scroll,
                             </div>
                             <div className="col-xl-9 col-lg-8">
                                 <div className="footer__social">
-                                    {authToken ? (
+                                    {userName ? (
                                         <ul className="list-wrap">
                                             { accessibleTiers && !accessibleTiers.includes('premium') && !accessibleTiers.includes('standard') ? (
                                                 <li><Link href="/plans" style={{'padding': '17px 23px 17px 20px', marginTop: '10px', marginBottom: '-10px'}} className="btn" data-animation-in="tg-fadeInUp" data-delay-in={1}><span className="btn-text">Subscribe</span></Link></li>
@@ -74,26 +79,31 @@ const Header1 = ({ scroll,
                                             <li>
                                                 Welcome {userName}! (<Link style={{display: 'inline'}} onClick={logout} href='#'>Sign out</Link>)
                                                 {accessibleTiers && accessibleTiers.includes('free') ? (
-                                                    <div><Link href='#' onClick={fetchPortalSessionUrl}>View Account</Link></div>
+                                                    <div><Link href='/account' >View Account</Link></div>
                                                 ) : null}
                                             </li>
                                         </ul>
                                     ) : (
                                         <ul className="list-wrap">
-                                            <li><Link href="/subscribe" style={{'padding': '17px 23px 17px 20px', marginTop: '10px', marginBottom: '-10px'}} className="btn" data-animation-in="tg-fadeInUp" data-delay-in={1}><span className="btn-text">Subscribe</span></Link></li>
-                                            <li><Link href="/sign_in" style={{
+                                            <li><Link href="#" onClick={
+                                                () => {
+                                                    loginWithRedirect({
+                                                        authorizationParams: {
+                                                            screen_hint: "signup",
+                                                            redirect_uri: `${window.location.origin}/subscribe`
+                                                        }
+                                                    });
+                                                }
+                                            } style={{'padding': '17px 23px 17px 20px', marginTop: '10px', marginBottom: '-10px'}} className="btn" data-animation-in="tg-fadeInUp" data-delay-in={1}><span className="btn-text">Subscribe</span></Link></li>
+                                            <li><Link href="#" style={{
                                                 'padding': '17px 20px',
                                                 marginTop: '10px',
                                                 marginBottom: '-10px',
                                                 color: '#111111 !important',
                                                 fontWeight: 'bold',
-                                            }} className="" data-animation-in="tg-fadeInUp" data-delay-in={1}>Sign in</Link></li>
+                                            }} className="" data-animation-in="tg-fadeInUp" data-delay-in={1} onClick={loginWithRedirect}>Sign in</Link></li>
                                         </ul>
                                     )}
-                                    
-                                        {/* <li><Link href="#"><i className="fab fa-facebook-f" /> Facebook <span>25K</span></Link></li>
-                                        <li><Link href="#"><i className="fab fa-twitter" /> Twitter <span>44K</span></Link></li>
-                                        <li><Link href="#"><i className="fab fa-youtube" /> Youtube <span>91K</span></Link></li> */}
                                 </div>
                             </div>
                         </div>

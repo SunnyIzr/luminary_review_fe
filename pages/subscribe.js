@@ -1,17 +1,15 @@
 import { useState } from "react";
 import Layout from "@/components/layout/Layout";
 import Link from "next/link";
-import { useAuth } from '../context/AuthContext';
 import { useRouter } from "next/router"; 
+import { useAuth0 } from "@auth0/auth0-react";
 const { root_domain } = require("@/constants/root_url");
 
 export default function Subscribe() {
     const router = useRouter();
-    const { login } = useAuth();
+    const { user, getAccessTokenSilently } = useAuth0();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
     const handleSubmit = async (e) => {
@@ -20,9 +18,13 @@ export default function Subscribe() {
         const data = {
             first_name: firstName,
             last_name: lastName,
-            email: email,
-            password: password,
         };
+
+        const accessToken = await getAccessTokenSilently({
+            audience: `luminary-review-api.com`,
+            scope: "read:current_user",
+        })
+        console.log("access token", accessToken)
 
         try {
             const response = await fetch(
@@ -30,6 +32,7 @@ export default function Subscribe() {
                 {
                     method: "POST",
                     headers: {
+                        "Authorization": `Bearer ${accessToken}`,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(data),
@@ -42,10 +45,7 @@ export default function Subscribe() {
                 const responseData = await response.json();
                 console.log("***")
                 console.log(responseData)
-                setError('')
-                const token = responseData.token
-                login(token);
-                router.push("/plan");
+                router.push("/plans");
             }
         } catch (error) {
             console.error(error);
@@ -86,9 +86,9 @@ export default function Subscribe() {
                                             paddingBottom: "8px",
                                         }}
                                     >
-                                        First, let's create your account.
+                                        Let's setup your account.
                                     </h2>
-                                    <p
+                                    {/* <p
                                         className="pb-30"
                                         style={{
                                             maxWidth: "550px",
@@ -96,7 +96,7 @@ export default function Subscribe() {
                                         }}
                                     >
                                         Already have an account? <Link href="/sign_in">Log in</Link>
-                                    </p>
+                                    </p> */}
                                     <div
                                         className=""
                                         style={{
@@ -172,38 +172,15 @@ export default function Subscribe() {
                                                 style={{
                                                     display: "block",
                                                     width: "100%",
-                                                    border: "1px solid #989898",
+                                                    
                                                     height: "50px",
                                                     padding: "0 10px",
                                                 }}
                                                 type="text"
+                                                disabled
                                                 placeholder=""
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                            />
-
-                                            <label
-                                                style={{
-                                                    fontWeight: "bold",
-                                                    marginTop: "35px",
-                                                    marginBottom: "5px",
-                                                }}
-                                            >
-                                                Password
-                                            </label>
-                                            <input
-                                                style={{
-                                                    display: "block",
-                                                    width: "100%",
-                                                    border: "1px solid #989898",
-                                                    height: "50px",
-                                                    padding: "0 10px",
-                                                }}
-                                                type="password"
-                                                placeholder=""
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                            />
+                                                value={user ? user.email : ''}
+                                                />
 
                                             <input
                                                 className="btn"

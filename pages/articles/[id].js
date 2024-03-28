@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import data from "../../util/blogData"
-import { useAuth } from "../../context/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
 const { root_domain } = require("@/constants/root_url");
 
 export default function BlogDetails() {
@@ -12,18 +12,24 @@ export default function BlogDetails() {
     const [item, setItem] = useState(null)
     const [article, setArticle] = useState(null)
     const { id } = Router.query
-    const { authToken } = useAuth();
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showSubscribeModal, setShowSubscribeModal] = useState(false);
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+    const { getAccessTokenSilently } = useAuth0();
 
     useEffect(() => {
         setItem(data.find((data) => data.id == id));
         const fetchData = async () => {
+            const domain = "dev-opns1cwxjgnbq7a2.us.auth0.com"
+            const accessToken = await getAccessTokenSilently({
+                audience: `luminary-review-api.com`,
+                scope: "read:current_user",
+            })
+            console.log("access token", accessToken)
             try {
                 const response = await fetch(`${root_domain}/articles/${id}`, {
                     headers: {
-                        "Authorization": `Bearer ${authToken}`,
+                        "Authorization": `Bearer ${accessToken}`,
                         "Content-Type": "application/json",
                     }
                 });
