@@ -22,21 +22,23 @@ export default function BlogDetails() {
     useEffect(() => {
         setItem(data.find((data) => data.id == id));
         const fetchData = async () => {
-            const domain = "dev-opns1cwxjgnbq7a2.us.auth0.com"
             const accessToken = await getAccessTokenSilently({
                 audience: `luminary-review-api.com`,
                 scope: "read:current_user",
             })
-            console.log("access token", accessToken)
+
             try {
+                console.log("Running request to get article")
                 const response = await fetch(`${root_domain}/articles/${id}`, {
                     headers: {
                         "Authorization": `Bearer ${accessToken}`,
                         "Content-Type": "application/json",
                     }
                 });
+                console.log('response', response)
                 if (!response.ok) {
                     const responseData = await response.json();
+                    console.log("response data ", responseData)
                     if (responseData.detail.code == 'NEED_LOGIN'){
                         setShowLoginModal(true)
 
@@ -55,12 +57,14 @@ export default function BlogDetails() {
                 console.error(error);
             }
         };
+        
         if (email){
             fetchData();
         } else {
+            console.log('no email present')
             setShowLoginModal(true)
         }
-    }, [id]);
+    }, [email, id]);
 
     const fetchPortalSessionUrl = async (e) => {
         e.preventDefault()
@@ -176,7 +180,7 @@ export default function BlogDetails() {
                                 marginTop: "3rem",
                                 marginBottom: '2rem'
                             }}>
-                                <Link href="/plan" className="btn btn-primary" style={{
+                                <Link href="/plans" className="btn btn-primary" style={{
                                     marginRight: "1rem"
                                 }}>
                                     Subscribe
