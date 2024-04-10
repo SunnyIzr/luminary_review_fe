@@ -9,8 +9,6 @@ export default function Account() {
   const { userName, lastName, email } = useUserData();
   const { loginWithRedirect, logout, getAccessTokenSilently } = useAuth0();
 
-  useEffect(() => {
-  }, []);
 
   const fetchPortalSessionUrl = async () => {
     // Make a request to fetch user name using the token
@@ -43,7 +41,7 @@ export default function Account() {
       <Layout headerStyle={2} footerStyle={2} footerClass="black-bg border-top-none">
         <div className="container" style={{marginTop: 60, maxWidth: 750, marginBottom: 60}}>
           <h2>My Account</h2>
-          
+         
           <div className="account-section">
             <div className="account-header">
               <h4>Basic Information</h4>
@@ -67,7 +65,7 @@ export default function Account() {
               </div>
             </div>
           </div>
-
+          <div id="lightswitch-form"></div>
           <div className="account-section">
             <div className="account-header">
               <h4>Payment Methods</h4>

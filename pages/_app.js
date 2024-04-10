@@ -17,6 +17,8 @@ import '../public/assets/css/main.css'
 import '../public/assets/css/slick.css'
 import '../public/assets/css/spacing.css'
 import '../public/assets/css/swiper-bundle.css'
+import Head from "next/head";
+import Script from "next/script";
 
 function MyApp({ Component, pageProps }) {
 
@@ -26,7 +28,15 @@ function MyApp({ Component, pageProps }) {
             setLoading(false)
         }, 1000)
     }, [])
-    return (<>
+    return (
+    <>
+        <Head>
+            <link rel="stylesheet" href="/index.css" />
+        </Head>
+        <Script src="/lightswitch-without-plan.js" type="text/javascript" onLoad={async () => {
+            await window.lightswitch.init("tlr");
+            await window.lightswitch.identify("1");      
+        }}></Script>
         {!loading ? (
             <Auth0Provider
                 domain="dev-opns1cwxjgnbq7a2.us.auth0.com"

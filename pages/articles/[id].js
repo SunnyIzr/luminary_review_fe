@@ -18,9 +18,21 @@ export default function BlogDetails() {
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
     const { getAccessTokenSilently, loginWithRedirect } = useAuth0();
     const { email } = useUserData();
+    const [hasAccess, setHasAccess] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         setItem(data.find((data) => data.id == id));
+        
+        const checkAccess = async () => {
+            const hasAccess = await window.lightswitch.checkAccess('premium')
+            setLoading(false)
+            setHasAccess(hasAccess)
+            if(!hasAccess) return
+        }
+
+        checkAccess();
+
         const fetchData = async () => {
             const accessToken = await getAccessTokenSilently({
                 audience: `luminary-review-api.com`,
@@ -64,7 +76,7 @@ export default function BlogDetails() {
             console.log('no email present')
             setShowLoginModal(true)
         }
-    }, [email, id]);
+    }, [email, id, loading]);
 
     const fetchPortalSessionUrl = async (e) => {
         e.preventDefault()
@@ -92,6 +104,14 @@ export default function BlogDetails() {
             console.error('Error fetching user name:', error);
         });
     };
+
+    if(loading){
+        return <div>Loading...</div>
+    }
+
+    if(hasAccess === false) {
+        return <div id="lightswitch-no-access"></div>
+    }
 
     if (showLoginModal) {
         return (
