@@ -83,7 +83,7 @@ const Header1 = ({ scroll,
                                                     });
                                                 }} href='#'>Sign out</Link>)
                                                 {accessibleTiers && accessibleTiers.includes('free') ? (
-                                                    <div><Link href='/account' >View Account</Link></div>
+                                                    <div><Link href='/account' >View Settings</Link></div>
                                                 ) : null}
                                             </li>
                                         </ul>
