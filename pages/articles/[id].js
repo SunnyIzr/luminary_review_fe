@@ -13,42 +13,237 @@ export default function BlogDetails() {
     const [item, setItem] = useState(null)
     const [article, setArticle] = useState(null)
     const { id } = Router.query
-    const [showLoginModal, setShowLoginModal] = useState(false);
-    const [showSubscribeModal, setShowSubscribeModal] = useState(false);
-    const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+    // const [showLoginModal, setShowLoginModal] = useState(false);
+    // const [showSubscribeModal, setShowSubscribeModal] = useState(false);
+    // const [showUpgradeModal, setShowUpgradeModal] = useState(false);
     const { getAccessTokenSilently, loginWithRedirect } = useAuth0();
     const { email } = useUserData();
 
+
+    // With Paywall
+    // useEffect(() => {
+    //     setItem(data.find((data) => data.id == id));
+    //     const fetchData = async () => {
+    //         const accessToken = await getAccessTokenSilently({
+    //             audience: `luminary-review-api.com`,
+    //             scope: "read:current_user",
+    //         })
+
+    //         try {
+    //             console.log("Running request to get article")
+    //             const response = await fetch(`${root_domain}/articles/${id}`, {
+    //                 headers: {
+    //                     "Authorization": `Bearer ${accessToken}`,
+    //                     "Content-Type": "application/json",
+    //                 }
+    //             });
+    //             console.log('response', response)
+    //             if (!response.ok) {
+    //                 const responseData = await response.json();
+    //                 console.log("response data ", responseData)
+    //                 if (responseData.detail.code == 'NEED_LOGIN'){
+    //                     setShowLoginModal(true)
+
+    //                 } else if (responseData.detail.code == 'NEED_SUBSCRIPTION') {
+    //                     setShowSubscribeModal(true)
+
+    //                 } else if (responseData.detail.code == 'NEED_PREMIUM') {
+    //                     setShowUpgradeModal(true)
+    //                 }
+    //             } else {
+    //                 const responseData = await response.json();
+    //                 setArticle(responseData);
+    //             }
+    //         } catch (error) {
+    //             console.log("ERROR")
+    //             console.error(error);
+    //         }
+    //     };
+        
+    //     if (email){
+    //         fetchData();
+    //     } else {
+    //         console.log('no email present')
+    //         setShowLoginModal(true)
+    //     }
+    // }, [email, id]);
+
+    // const fetchPortalSessionUrl = async (e) => {
+    //     e.preventDefault()
+    //     // Make a request to fetch user name using the token
+    //     // Replace the URL with your actual API endpoint
+    //     const accessToken = await getAccessTokenSilently({
+    //         audience: `luminary-review-api.com`,
+    //         scope: "read:current_user",
+    //     })
+
+    //     fetch(`${root_domain}/users/stripe_portal`, {
+    //         headers: {
+    //             Authorization: `Bearer ${accessToken}`,
+    //             "Content-Type": "application/json",
+    //         }, 
+    //         method: "POST",
+    //         body: JSON.stringify({ return_url: window.location.origin })
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log('portal data', data)
+    //         window.location.href = data.url;
+    //     })
+    //     .catch(error => {
+    //         console.error('Error fetching user name:', error);
+    //     });
+    // };
+
+    // if (showLoginModal) {
+    //     return (
+    //         <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: "block" }}>
+    //             <div className="modal-dialog modal-dialog-centered" role="document" style={{'maxWidth': '700px'}}>
+    //                 <div className="modal-content" style={{
+    //                     border: 'none',
+    //                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
+    //                     padding: '30px 40px'
+    //                 }}>
+    //                     <div className="modal-body">
+    //                         <h4 style={{
+    //                             textAlign: "center",
+    //                             marginBottom: "3rem",
+    //                             marginTop: "2rem",
+    //                             fontSize: "1.5rem"
+                            
+    //                         }}>
+    //                             Log in for access
+    //                         </h4>
+    //                         <p>
+    //                             Unlock full access to insightful and exclusive content by logging in or subscribing today. Elevate your understanding with The Luminary Review.
+    //                         </p>
+    //                         <div style={{
+    //                             textAlign: "center",
+    //                             marginTop: "3rem",
+    //                             marginBottom: '2rem'
+    //                         }}>
+    //                             <Link href="#" onClick={
+    //                                 (e) => {
+    //                                     e.preventDefault();
+    //                                     loginWithRedirect({
+    //                                         authorizationParams: {
+    //                                             screen_hint: "signup",
+    //                                             redirect_uri: `${window.location.origin}/subscribe`
+    //                                         }
+    //                                     });
+    //                                 }
+    //                             } className="btn btn-primary" style={{
+    //                                 marginRight: "1rem"
+    //                             }}>
+    //                                 Subscribe
+    //                             </Link>
+    //                             <div style={{marginTop: '10px'}}>
+    //                                 Already have an account? <Link href="/#" onClick={
+    //                                     (e) => {
+    //                                         e.preventDefault();
+    //                                         loginWithRedirect({
+    //                                             redirect_uri: window.location.href
+    //                                         });
+    //                                     }
+    //                                 }>Log in</Link>.
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     )
+    // }
+
+    // if (showSubscribeModal) {
+    //     return (
+    //         <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: "block" }}>
+    //             <div className="modal-dialog modal-dialog-centered" role="document" style={{'maxWidth': '700px'}}>
+    //                 <div className="modal-content" style={{
+    //                     border: 'none',
+    //                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
+    //                     padding: '30px 40px'
+    //                 }}>
+    //                     <div className="modal-body">
+    //                         <h4 style={{
+    //                             textAlign: "center",
+    //                             marginBottom: "3rem",
+    //                             marginTop: "2rem",
+    //                             fontSize: "1.5rem"
+                            
+    //                         }}>
+    //                             Subscribe for access
+    //                         </h4>
+    //                         <p>
+    //                             Unlock full access to insightful and exclusive content by subscribing today. Elevate your understanding with The Luminary Review.
+    //                         </p>
+    //                         <div style={{
+    //                             textAlign: "center",
+    //                             marginTop: "3rem",
+    //                             marginBottom: '2rem'
+    //                         }}>
+    //                             <Link href="/plans" className="btn btn-primary" style={{
+    //                                 marginRight: "1rem"
+    //                             }}>
+    //                                 Subscribe
+    //                             </Link>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     )
+    // }
+
+    // if (showUpgradeModal) {
+    //     return (
+    //         <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: "block" }}>
+    //             <div className="modal-dialog modal-dialog-centered" role="document" style={{'maxWidth': '700px'}}>
+    //                 <div className="modal-content" style={{
+    //                     border: 'none',
+    //                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
+    //                     padding: '30px 40px'
+    //                 }}>
+    //                     <div className="modal-body">
+    //                         <h4 style={{
+    //                             textAlign: "center",
+    //                             marginBottom: "3rem",
+    //                             marginTop: "2rem",
+    //                             fontSize: "1.5rem"
+                            
+    //                         }}>
+    //                             Upgrade for access
+    //                         </h4>
+    //                         <p>
+    //                             Unlock full access to insightful and exclusive content by subscribing to Premium today. Elevate your understanding with The Luminary Review.
+    //                         </p>
+    //                         <div style={{
+    //                             textAlign: "center",
+    //                             marginTop: "3rem",
+    //                             marginBottom: '2rem'
+    //                         }}>
+    //                             <Link href="#" onClick={fetchPortalSessionUrl} className="btn btn-primary" style={{
+    //                                 marginRight: "1rem"
+    //                             }}>
+    //                                 Upgrade
+    //                             </Link>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     )
+    // }
+
+    // Without Paywall
     useEffect(() => {
         setItem(data.find((data) => data.id == id));
         const fetchData = async () => {
-            const accessToken = await getAccessTokenSilently({
-                audience: `luminary-review-api.com`,
-                scope: "read:current_user",
-            })
-
             try {
                 console.log("Running request to get article")
-                const response = await fetch(`${root_domain}/articles/${id}`, {
-                    headers: {
-                        "Authorization": `Bearer ${accessToken}`,
-                        "Content-Type": "application/json",
-                    }
-                });
+                const response = await fetch(`${root_domain}/articles/${id}`);
                 console.log('response', response)
-                if (!response.ok) {
-                    const responseData = await response.json();
-                    console.log("response data ", responseData)
-                    if (responseData.detail.code == 'NEED_LOGIN'){
-                        setShowLoginModal(true)
-
-                    } else if (responseData.detail.code == 'NEED_SUBSCRIPTION') {
-                        setShowSubscribeModal(true)
-
-                    } else if (responseData.detail.code == 'NEED_PREMIUM') {
-                        setShowUpgradeModal(true)
-                    }
-                } else {
+                if (response.ok) {
                     const responseData = await response.json();
                     setArticle(responseData);
                 }
@@ -57,182 +252,9 @@ export default function BlogDetails() {
                 console.error(error);
             }
         };
-        
-        if (email){
-            fetchData();
-        } else {
-            console.log('no email present')
-            setShowLoginModal(true)
-        }
+        fetchData()
     }, [email, id]);
-
-    const fetchPortalSessionUrl = async (e) => {
-        e.preventDefault()
-        // Make a request to fetch user name using the token
-        // Replace the URL with your actual API endpoint
-        const accessToken = await getAccessTokenSilently({
-            audience: `luminary-review-api.com`,
-            scope: "read:current_user",
-        })
-
-        fetch(`${root_domain}/users/stripe_portal`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-            }, 
-            method: "POST",
-            body: JSON.stringify({ return_url: window.location.origin })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('portal data', data)
-            window.location.href = data.url;
-        })
-        .catch(error => {
-            console.error('Error fetching user name:', error);
-        });
-    };
-
-    if (showLoginModal) {
-        return (
-            <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: "block" }}>
-                <div className="modal-dialog modal-dialog-centered" role="document" style={{'maxWidth': '700px'}}>
-                    <div className="modal-content" style={{
-                        border: 'none',
-                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
-                        padding: '30px 40px'
-                    }}>
-                        <div className="modal-body">
-                            <h4 style={{
-                                textAlign: "center",
-                                marginBottom: "3rem",
-                                marginTop: "2rem",
-                                fontSize: "1.5rem"
-                            
-                            }}>
-                                Log in for access
-                            </h4>
-                            <p>
-                                Unlock full access to insightful and exclusive content by logging in or subscribing today. Elevate your understanding with The Luminary Review.
-                            </p>
-                            <div style={{
-                                textAlign: "center",
-                                marginTop: "3rem",
-                                marginBottom: '2rem'
-                            }}>
-                                <Link href="#" onClick={
-                                    (e) => {
-                                        e.preventDefault();
-                                        loginWithRedirect({
-                                            authorizationParams: {
-                                                screen_hint: "signup",
-                                                redirect_uri: `${window.location.origin}/subscribe`
-                                            }
-                                        });
-                                    }
-                                } className="btn btn-primary" style={{
-                                    marginRight: "1rem"
-                                }}>
-                                    Subscribe
-                                </Link>
-                                <div style={{marginTop: '10px'}}>
-                                    Already have an account? <Link href="/#" onClick={
-                                        (e) => {
-                                            e.preventDefault();
-                                            loginWithRedirect({
-                                                redirect_uri: window.location.href
-                                            });
-                                        }
-                                    }>Log in</Link>.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    if (showSubscribeModal) {
-        return (
-            <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: "block" }}>
-                <div className="modal-dialog modal-dialog-centered" role="document" style={{'maxWidth': '700px'}}>
-                    <div className="modal-content" style={{
-                        border: 'none',
-                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
-                        padding: '30px 40px'
-                    }}>
-                        <div className="modal-body">
-                            <h4 style={{
-                                textAlign: "center",
-                                marginBottom: "3rem",
-                                marginTop: "2rem",
-                                fontSize: "1.5rem"
-                            
-                            }}>
-                                Subscribe for access
-                            </h4>
-                            <p>
-                                Unlock full access to insightful and exclusive content by subscribing today. Elevate your understanding with The Luminary Review.
-                            </p>
-                            <div style={{
-                                textAlign: "center",
-                                marginTop: "3rem",
-                                marginBottom: '2rem'
-                            }}>
-                                <Link href="/plans" className="btn btn-primary" style={{
-                                    marginRight: "1rem"
-                                }}>
-                                    Subscribe
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    if (showUpgradeModal) {
-        return (
-            <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: "block" }}>
-                <div className="modal-dialog modal-dialog-centered" role="document" style={{'maxWidth': '700px'}}>
-                    <div className="modal-content" style={{
-                        border: 'none',
-                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
-                        padding: '30px 40px'
-                    }}>
-                        <div className="modal-body">
-                            <h4 style={{
-                                textAlign: "center",
-                                marginBottom: "3rem",
-                                marginTop: "2rem",
-                                fontSize: "1.5rem"
-                            
-                            }}>
-                                Upgrade for access
-                            </h4>
-                            <p>
-                                Unlock full access to insightful and exclusive content by subscribing to Premium today. Elevate your understanding with The Luminary Review.
-                            </p>
-                            <div style={{
-                                textAlign: "center",
-                                marginTop: "3rem",
-                                marginBottom: '2rem'
-                            }}>
-                                <Link href="#" onClick={fetchPortalSessionUrl} className="btn btn-primary" style={{
-                                    marginRight: "1rem"
-                                }}>
-                                    Upgrade
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
+    
     if (!article) {
         return null;
     }
