@@ -17,6 +17,7 @@ import '../public/assets/css/main.css'
 import '../public/assets/css/slick.css'
 import '../public/assets/css/spacing.css'
 import '../public/assets/css/swiper-bundle.css'
+import Script from "next/script";
 
 function MyApp({ Component, pageProps }) {
 
@@ -27,6 +28,14 @@ function MyApp({ Component, pageProps }) {
         }, 1000)
     }, [])
     return (<>
+
+        <Script
+        src="https://lightswitch-js-sdk-poc.vercel.app/index.js"
+        type="text/javascript"
+        onLoad={async () => {
+            await window.lightswitch.init("tlr");
+        }}
+        ></Script>
         {!loading ? (
             <Auth0Provider
                 domain="dev-opns1cwxjgnbq7a2.us.auth0.com"

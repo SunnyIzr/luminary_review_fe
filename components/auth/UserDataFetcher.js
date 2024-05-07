@@ -32,6 +32,7 @@ export const UserDataFetcher = ({ children }) => {
                 console.log('user data :', userData)
                 console.log('firstname :', userData.first_name)
                 console.log('ats :', userData.accessible_content_tiers)
+                await window.lightswitch.login("2");
                 setUserName(userData.first_name);
                 setLastName(userData.last_name);
                 setEmail(userData.email);

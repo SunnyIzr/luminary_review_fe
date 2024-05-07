@@ -77,7 +77,8 @@ const Header1 = ({ scroll,
                                                 <li><Link href="#" onClick={fetchPortalSessionUrl} style={{'padding': '17px 23px 17px 20px', marginTop: '10px', marginBottom: '-10px'}} className="btn" data-animation-in="tg-fadeInUp" data-delay-in={1}><span className="btn-text">Upgrade</span></Link></li>
                                             ): null}
                                             <li>
-                                                Welcome {userName}! (<Link style={{display: 'inline'}} onClick={() => {
+                                                Welcome {userName}! (<Link style={{display: 'inline'}} onClick={async () => {
+                                                    await window.lightswitch.logout();
                                                     logout({ 
                                                         logoutParams: {returnTo: window.location.origin}
                                                     });

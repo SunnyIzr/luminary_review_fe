@@ -114,7 +114,7 @@ export default function Account() {
           )}
           {selectedTab === 'Subscription' && (
             <div className="subscription-section">
-              <p>Subscription details will go here.</p>
+              <div id="lightswitch-form"></div>
             </div>
           )}
           {selectedTab === 'Notifications' && (
